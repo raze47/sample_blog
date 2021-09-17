@@ -54,6 +54,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('store', [CommentsController::class, 'store']);
         //Show
         Route::get('show', [CommentsController::class, 'show']);
+        //Delete
+        Route::post('destroy', [CommentsController::class, 'destroy']);
+
+
     });
 });
 

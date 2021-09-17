@@ -101,8 +101,16 @@ class CommentsController extends Controller
      * @param  \App\Models\Comments  $comments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comments $comments)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $comment = Comments::where('comment_id', $request->comment_id);            
+            $comment->delete();
+
+        }
+        catch(\Exception $e){
+            dd($e);
+        }
+        return back();
     }
 }

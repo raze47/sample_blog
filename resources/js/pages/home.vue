@@ -24,10 +24,13 @@
                     <br />
                     <h5>Comments: </h5>
                     <div v-for="comment_home in comments_home" v-bind:key="comment_home.id">
-                        
+                       
                         <div v-if = "comment_home.post_id == item.post_id">
+                             <button v-if="curr_user == comment_home.user_id" class="btn btn-sm btn-danger" @click="deleteComment(comment_home.comment_id)">Delete</button>
                             <b>{{comment_home.user['name']}}</b>: {{comment_home.comment}}
-                            
+                           
+                            <br>
+                            <br>
                         </div>
                     
                     </div>
@@ -144,6 +147,11 @@
                 window.location.reload();
             },
 
+            async deleteComment(comment_id_del){
+                alert("Deleting comment, please wait");
+                await axios.post("/api/post_comment/destroy", { comment_id: comment_id_del });
+                window.location.reload();
+            },
    
 
 
