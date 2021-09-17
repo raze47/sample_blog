@@ -15,7 +15,7 @@
             <br />
             <br />
 
-            <div v-for="item in post_items" v-bind:key="item.id">
+            <div v-for="(item,index) in post_items" v-bind:key="item.id">
                 <div class="posts-container">
                     <h5>User-ID: {{item.user_id}} {{item.user['name']}}</h5>
                     <br />
@@ -35,10 +35,15 @@
                     <button v-if="curr_user == item.user_id" class="btn btn-danger" @click="deletePost(item.post_id)">Delete</button>
                     <br />
                     <br />
-                    <textarea name="comments_text" v-model="comments_text" class="form-control mb-1" rows="2" placeholder="Comment here"></textarea>
-                    <br />
-                    <button class="btn btn-success" @click="commentStore(item.post_id, comments_text)">Submit Comment</button>
-                    <hr />
+
+                    
+                 
+                        <textarea v-model="list_comments_text[index]" class="form-control mb-1" rows="2" placeholder="Comment here"></textarea>
+                        <br />
+                        <button class="btn btn-success" @click="commentStore(item.post_id, list_comments_text[index])">Submit Comment</button>
+                        <hr />
+                 
+                  
                 </div>
             </div>
         </div>
@@ -61,6 +66,7 @@
                 post_items: undefined,
                 comments_home: undefined,
                 curr_user: undefined,
+                list_comments_text: [],
                 page: 1,
             };
         },
@@ -73,6 +79,8 @@
 
             async init(){
                 try{
+                    this.open_comment = false;
+                    this.pass_item_id = undefined;
                     this.initPosts();
                     this.initComments();
                 }
@@ -136,11 +144,16 @@
                 window.location.reload();
             },
 
+   
+
+
             async commentStore(post_id_comment, comments_text) {
                 alert("Commenting, please wait");
                 await axios.post("/api/post_comment/store", {post_id: post_id_comment, comment: comments_text });
                 window.location.reload();
             },
+
+            
         },
     };
 </script>
