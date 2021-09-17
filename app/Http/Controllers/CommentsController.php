@@ -6,6 +6,8 @@ use App\Models\Comments;
 use App\Models\User;
 use App\Models\Posts;
 use Auth;
+use DB;
+use Carbon;
 use Illuminate\Http\Request;
 
 
@@ -42,13 +44,17 @@ class CommentsController extends Controller
     public function store(Request $request)
     {        
        $comments = new Comments;
- 
+     
         try{
            $comments->insert([
                 'comment' => $request->comment,
                 'user_id' => Auth::id(),
-                'post_id' => $request->post_id
+                'post_id' => $request->post_id,
+                'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+                'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
             ]);
+   //         $comments->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+    //        $comments->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             return back();
         }
         catch(\Exception $e){

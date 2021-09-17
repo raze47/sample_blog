@@ -3,7 +3,7 @@
         <div class="card-body">
             <form action="" id="user-post" method="post" @submit.prevent="postContent()">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Post</label>
+                    <label for="exampleInputEmail1">Write a post!</label>
                     <textarea name="posts_text" class="form-control" v-model="posts_text" height="500px" placeholder="Post here..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-md">Post</button>
@@ -17,7 +17,7 @@
 
             <div v-for="(item,index) in post_items" v-bind:key="item.id">
                 <div class="posts-container">
-                    <h5>User-ID: {{item.user_id}} {{item.user['name']}}</h5>
+                    <h5>{{item.user['name']}}</h5>
                     <br />
                     <h6>{{item.content}}</h6>
                     <br />
@@ -26,7 +26,9 @@
                     <div v-for="comment_home in comments_home" v-bind:key="comment_home.id">
                        
                         <div v-if = "comment_home.post_id == item.post_id">
-                             <button v-if="curr_user == comment_home.user_id" class="btn btn-sm btn-danger" @click="deleteComment(comment_home.comment_id)">Delete</button>
+                             <button v-if="curr_user == comment_home.user_id" class="btn btn-sm btn-danger" @click="deleteComment(comment_home.comment_id)">X</button>
+                             <b>{{comment_home.created_at}}</b>
+                             <br>
                             <b>{{comment_home.user['name']}}</b>: {{comment_home.comment}}
                            
                             <br>
@@ -35,7 +37,7 @@
                     
                     </div>
                      <br />
-                    <button v-if="curr_user == item.user_id" class="btn btn-danger" @click="deletePost(item.post_id)">Delete</button>
+                    <button v-if="curr_user == item.user_id" class="btn btn-danger" @click="deletePost(item.post_id)">Delete Post</button>
                     <br />
                     <br />
 
@@ -55,8 +57,12 @@
 
 <script>
     import axios from "axios";
+    import moment from 'moment';
+
     export default {
         middleware: "auth",
+
+        
 
         metaInfo() {
             return { title: this.$t("home") };
@@ -79,6 +85,8 @@
         },
 
         methods: {
+
+
 
             async init(){
                 try{
