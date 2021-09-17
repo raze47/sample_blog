@@ -51,10 +51,7 @@ class PostsController extends Controller
             dd($request->posts_text);
         }
         return back();
-        /*
-        return([
-            'data' => $data
-        ]);*/
+   
     }
 
     /**
@@ -94,9 +91,22 @@ class PostsController extends Controller
      * @param  \App\Models\Posts  $posts
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Posts $posts)
+    public function update(Request $request)
     {
-        //
+        $user = Auth::user();
+        $post = $user->posts();
+
+        try{
+           
+           $post->update([
+                'content' => $request->posts_text,
+            ]);
+        }
+        catch(\Exception $e){
+            print($e);
+            dd($request->posts_text);
+        }
+        return back();
     }
 
     /**

@@ -47,6 +47,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('show', [PostsController::class, 'show']);
         //Delete
         Route::post('destroy', [PostsController::class, 'destroy']);
+        //Update
+        Route::post('update', [PostsController::class, 'update']);
+
     });
 
     Route::prefix('post_comment')->group(function(){

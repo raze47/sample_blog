@@ -22,6 +22,17 @@
                     <h6>{{item.content}}</h6>
                     <br />
                     <br />
+
+                    <button v-if="curr_user == item.user_id" class="btn btn-sm btn-primary" @click="initUpdatePost()">Update</button>
+                    <div v-if="posts_update == true">
+                        
+                        <textarea v-model="list_posts_update[index]" class="form-control mb-1" rows="2" placeholder="Update post"></textarea>
+                        <br />
+                        <button class="btn btn-sm btn-warning" @click="updatePost(item.post_id, list_posts_update[index])">Update</button>
+                        <hr />
+
+                    </div>
+                    
                     <h5>Comments: </h5>
                     <div v-for="comment_home in comments_home" v-bind:key="comment_home.id">
                        
@@ -76,6 +87,8 @@
                 comments_home: undefined,
                 curr_user: undefined,
                 list_comments_text: [],
+                list_posts_update: [],
+                posts_update: false,
                 page: 1,
             };
         },
@@ -90,8 +103,7 @@
 
             async init(){
                 try{
-                    this.open_comment = false;
-                    this.pass_item_id = undefined;
+                    posts_update: false;
                     this.initPosts();
                     this.initComments();
                 }
@@ -168,6 +180,16 @@
                 await axios.post("/api/post_comment/store", {post_id: post_id_comment, comment: comments_text });
                 window.location.reload();
             },
+
+            async initUpdatePost(){
+                this.posts_update = true;
+            },
+
+            async updatePost(post_id_update, post_update){
+                 alert("Updating, please wait");
+                await axios.post("/api/post_content/update", {post_id: post_id_update, posts_text: post_update });
+                window.location.reload();
+            }
 
             
         },
