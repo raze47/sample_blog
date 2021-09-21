@@ -15,7 +15,7 @@
             <br />
             <br />
 
-            <div v-for="(item,index) in post_items" v-bind:key="item.id">
+            <div v-for="(item,index) in post_items" v-bind:key="item.id" :loading="loading">
                 <div class="posts-container">
                     <h5>{{item.user['name']}}</h5>
                     <br />
@@ -90,6 +90,7 @@
                 list_posts_update: [],
                 posts_update: false,
                 page: 1,
+                loading: true,
             };
         },
 
@@ -98,9 +99,6 @@
         },
 
         methods: {
-
-
-
             async init(){
                 try{
                     posts_update: false;
@@ -156,29 +154,26 @@
             },
 
             async postContent() {
-                alert("Posting, please wait");
                 await axios.post("/api/post_content/store", { posts_text: this.posts_text });
-                window.location.reload();
+                this.initPosts();
             },
 
             async deletePost(post_id_del) {
-                alert("Deleting, please wait");
+           
                 await axios.post("/api/post_content/destroy", { post_id: post_id_del });
-                window.location.reload();
+                this.initPosts();
             },
 
             async deleteComment(comment_id_del){
-                alert("Deleting comment, please wait");
                 await axios.post("/api/post_comment/destroy", { comment_id: comment_id_del });
-                window.location.reload();
+                this.initComments();
             },
    
 
 
             async commentStore(post_id_comment, comments_text) {
-                alert("Commenting, please wait");
                 await axios.post("/api/post_comment/store", {post_id: post_id_comment, comment: comments_text });
-                window.location.reload();
+                this.initComments();
             },
 
             async initUpdatePost(){
@@ -186,9 +181,8 @@
             },
 
             async updatePost(post_id_update, post_update){
-                 alert("Updating, please wait");
                 await axios.post("/api/post_content/update", {post_id: post_id_update, posts_text: post_update });
-                window.location.reload();
+                this.initPosts();
             }
 
             
